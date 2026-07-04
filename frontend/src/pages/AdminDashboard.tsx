@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import api from "../services/api";
+import {
+  FileText,
+  Clock3,
+  CheckCircle2,
+  XCircle,
+} from "lucide-react";
 
 import DashboardCard from "../components/DashboardCard";
 //import AdminLeaveTable from "../components/AdminLeaveTable";
@@ -54,19 +60,19 @@ export default function AdminDashboard() {
   ).length;
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-50">
 
       {/* Header */}
 
-      <div className="bg-blue-700 text-white p-6 flex justify-between items-center">
+      <div className="bg-white border-b border-slate-200 shadow-sm px-8 py-5 flex justify-between items-center">
 
         <div>
 
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-3xl font-bold text-slate-800">
             Admin Dashboard
           </h1>
 
-          <p className="mt-1">
+          <p className="text-slate-500 mt-1">
             Welcome {admin.username}
           </p>
 
@@ -77,7 +83,7 @@ export default function AdminDashboard() {
             localStorage.removeItem("admin");
             window.location.href = "/";
           }}
-          className="bg-red-500 hover:bg-red-600 px-5 py-2 rounded-lg"
+          className="px-5 py-2 bg-red-500 text-white rounded-xl shadow hover:bg-red-600 transition"
         >
           Logout
         </button>
@@ -86,30 +92,35 @@ export default function AdminDashboard() {
 
       {/* Cards */}
 
-      <div className="grid md:grid-cols-4 gap-5 p-8">
+      
+        <div className="grid md:grid-cols-4 gap-6 px-8 pt-8 pb-4">
 
         <DashboardCard
           title="Total Requests"
           value={total}
-          color="bg-blue-600"
+          color="bg-blue-300"
+          icon={<FileText className="text-blue-600" size={30} />}
         />
 
         <DashboardCard
           title="Pending"
           value={pending}
-          color="bg-yellow-500"
+          color="bg-yellow-300"
+          icon={<Clock3 className="text-yellow-600" size={30} />}
         />
 
         <DashboardCard
           title="Approved"
           value={approved}
-          color="bg-green-600"
+          color="bg-green-300"
+          icon={<CheckCircle2 className="text-green-600" size={30} />}
         />
 
         <DashboardCard
           title="Rejected"
           value={rejected}
-          color="bg-red-600"
+          color="bg-red-300"
+          icon={<XCircle className="text-red-600" size={30} />}
         />
 
       </div>

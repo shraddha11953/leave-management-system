@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { User, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import api from "../services/api";
 import { toast } from "react-toastify";
+
+import "./AdminLogin.css";
 
 export default function AdminLogin() {
 
     const navigate = useNavigate();
 
     const [username, setUsername] = useState("");
+
     const [password, setPassword] = useState("");
+
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleLogin = async (e: React.FormEvent) => {
 
@@ -17,13 +22,10 @@ export default function AdminLogin() {
 
         try {
 
-            const response = await api.post(
-                "/admin/login",
-                {
-                    username,
-                    password
-                }
-            );
+            const response = await api.post("/admin/login", {
+                username,
+                password,
+            });
 
             localStorage.setItem(
                 "admin",
@@ -34,8 +36,7 @@ export default function AdminLogin() {
 
             navigate("/admin/dashboard");
 
-        }
-        catch {
+        } catch {
 
             toast.error("Invalid Username or Password");
 
@@ -45,65 +46,101 @@ export default function AdminLogin() {
 
     return (
 
-        <div className="min-h-screen bg-gradient-to-br from-slate-100 to-blue-100 flex justify-center items-center">
+        <div className="admin-page">
 
-            <div className="bg-white shadow-2xl rounded-2xl p-10 w-[430px]">
+            {/* Background */}
 
-                <h1 className="text-3xl font-bold text-center text-blue-700 mb-2">
+            <div className="blur blur1"></div>
+
+            <div className="blur blur2"></div>
+
+            <div className="blur blur3"></div>
+
+            <div className="login-card">
+                <button
+  className="back-btn"
+  onClick={() => navigate("/")}
+>
+  ← Back to home
+</button>
+
+                <div className="login-icon">
+
+                    <ShieldCheck size={45} />
+
+                </div>
+
+                <h1>
 
                     Admin Login
 
                 </h1>
 
-                <p className="text-center text-gray-500 mb-8">
+                <p>
 
-                    Login using your administrator credentials
+                    Welcome back! Login to continue.
 
                 </p>
 
                 <form
                     onSubmit={handleLogin}
-                    className="space-y-5"
                 >
 
-                    <input
+                    <div className="input-group">
 
-                        type="text"
+                        <User size={20} />
 
-                        placeholder="Username"
+                        <input
+                            type="text"
+                            placeholder="Username"
+                            value={username}
+                            onChange={(e) =>
+                                setUsername(e.target.value)
+                            }
+                            required
+                        />
 
-                        value={username}
+                    </div>
 
-                        onChange={(e) => setUsername(e.target.value)}
+                    <div className="input-group">
 
-                        className="w-full border rounded-lg p-3 outline-none focus:border-blue-500"
+                        <Lock size={20} />
 
-                        required
+                        <input
+                            type={
+                                showPassword
+                                    ? "text"
+                                    : "password"
+                            }
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) =>
+                                setPassword(e.target.value)
+                            }
+                            required
+                        />
 
-                    />
+                        <button
+                            type="button"
+                            className="eye-btn"
+                            onClick={() =>
+                                setShowPassword(!showPassword)
+                            }
+                        >
 
-                    <input
+                            {showPassword ? (
+                                <EyeOff size={20} />
+                            ) : (
+                                <Eye size={20} />
+                            )}
 
-                        type="password"
+                        </button>
 
-                        placeholder="Password"
-
-                        value={password}
-
-                        onChange={(e) => setPassword(e.target.value)}
-
-                        className="w-full border rounded-lg p-3 outline-none focus:border-blue-500"
-
-                        required
-
-                    />
+                    </div>
 
                     <button
-
+                        className="login-btn"
                         type="submit"
-
-                        className="w-full bg-blue-600 text-white rounded-lg py-3 hover:bg-blue-700 duration-300"
-
                     >
 
                         Login
@@ -112,17 +149,7 @@ export default function AdminLogin() {
 
                 </form>
 
-                <button
-
-                    onClick={() => navigate("/")}
-
-                    className="mt-6 w-full border rounded-lg py-3 hover:bg-gray-100"
-
-                >
-
-                    Back To Home
-
-                </button>
+                
 
             </div>
 

@@ -127,7 +127,7 @@ const rejectLeave = async (feedback: string) => {
 
     <div className="bg-white rounded-xl shadow-lg p-6">
 
-      <h2 className="text-2xl font-bold text-blue-700 mb-6">
+      <h2 className="text-2xl font-bold text-slate-800 mb-10">
 
         Leave Requests
 
@@ -135,37 +135,40 @@ const rejectLeave = async (feedback: string) => {
 
       <div className="overflow-x-auto">
 
-        <table className="w-full">
-
+        <table className="w-full border border-slate-300 rounded-xl overflow-hidden border-collapse">
           <thead>
 
-            <tr className="bg-blue-600 text-white">
+            <tr className="bg-slate-100 text-slate-700">
+              <th className="p-3 border">Sr No</th>
 
-              <th className="p-3">
+              <th className="px-4 py-4 border border-slate-300">
                 Employee
               </th>
 
-              <th className="p-3">
+              <th className="px-4 py-4 border border-slate-300">
                 Reason
               </th>
 
-              <th className="p-3">
+              <th className="px-4 py-4 border border-slate-300">
                 Start
               </th>
 
-              <th className="p-3">
+              <th className="px-4 py-4 border border-slate-300">
                 End
               </th>
+              <th className="px-4 py-4 border border-slate-300">
+  Total Days
+</th>
 
-              <th className="p-3">
+              <th className="px-4 py-4 border border-slate-300">
                 Status
               </th>
 
-              <th className="p-3">
+              <th className="px-4 py-4 border border-slate-300">
                 Feedback
               </th>
 
-              <th className="p-3">
+              <th className="px-4 py-4 border border-slate-300">
                 Action
               </th>
 
@@ -177,38 +180,52 @@ const rejectLeave = async (feedback: string) => {
 
             {
 
-              requests.map((leave) => (
+              requests.map((leave,index) => (
 
                 <tr
                   key={leave.id}
-                  className="border-b hover:bg-gray-50"
+                  className="hover:bg-slate-50 transition"
                 >
-
-                  <td className="p-3">
+                  <td className="p-3 border text-center">
+  {index + 1}
+</td>
+                  <td className="p-3 border border-slate-200">
 
                     {leave.employee_name}
 
                   </td>
 
-                  <td className="p-3">
+                  <td className="p-3 border border-slate-200">
 
                     {leave.leave_reason}
 
                   </td>
 
-                  <td className="p-3">
+                  <td className="p-3 border border-slate-200">
 
                     {leave.start_date}
 
                   </td>
 
-                  <td className="p-3">
+                  <td className="p-3 border border-slate-200">
 
                     {leave.end_date}
 
                   </td>
 
-                  <td className="p-3">
+                  <td className="p-3 border text-center">
+
+  {Math.ceil(
+    (
+      new Date(leave.end_date).getTime() -
+      new Date(leave.start_date).getTime()
+    ) /
+      (1000 * 60 * 60 * 24)
+  ) + 1}
+
+</td>
+
+                  <td className="p-3 border border-slate-200">
 
                     <span
                       className={`px-3 py-1 rounded-full text-sm font-semibold ${getBadgeColor(
@@ -220,7 +237,7 @@ const rejectLeave = async (feedback: string) => {
 
                   </td>
 
-                  <td className="p-3">
+                  <td className="px-4 py-4 border border-slate-200 max-w-[280px] text-sm leading-6 break-words">
 
                     {
 
@@ -232,48 +249,46 @@ const rejectLeave = async (feedback: string) => {
 
                   </td>
 
-                  <td className="p-3 flex gap-2">
+                  <td className="px-4 py-4 border border-slate-200 text-center">
+{
+leave.status==="PENDING" && (
 
-                    {
+<select
+className="border rounded-lg px-3 py-2 bg-white shadow-sm"
+defaultValue=""
+onChange={(e)=>{
 
-                      leave.status === "PENDING" && (
+if(e.target.value==="APPROVE")
+approveLeave(leave.id);
 
-                        <>
+if(e.target.value==="REJECT"){
+setSelectedLeaveId(leave.id);
+setOpenModal(true);
+}
 
-                          <button
+e.target.selectedIndex=0;
 
-                            onClick={() => approveLeave(leave.id)}
-
-                            className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg"
-
-                          >
-
-                            Approve
-
-                          </button>
-
-                          <button
-
-                            onClick={() => {
-    setSelectedLeaveId(leave.id);
-    setOpenModal(true);
 }}
+>
 
-                            className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg"
+<option value="">
+Choose
+</option>
 
-                          >
+<option value="APPROVE">
+✅ Approve
+</option>
 
-                            Reject
+<option value="REJECT">
+❌ Reject
+</option>
 
-                          </button>
+</select>
 
-                        </>
+)
+}
+</td>
 
-                      )
-
-                    }
-
-                  </td>
 
                 </tr>
 

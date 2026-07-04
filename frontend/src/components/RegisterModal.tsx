@@ -1,14 +1,34 @@
 import { useState } from "react";
+import {
+  User,
+  Mail,
+  Building2,
+  Lock,
+  Eye,
+  EyeOff,
+  UserPlus,
+  X,
+} from "lucide-react";
 
 import api from "../services/api";
 import { toast } from "react-toastify";
+
+import "./RegisterModal.css";
 
 interface RegisterModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
+export default function RegisterModal({
+  isOpen,
+  onClose,
+}: RegisterModalProps) {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false);
+
   const [formData, setFormData] = useState({
     username: "",
     full_name: "",
@@ -34,109 +54,232 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
   ) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
+    if (
+      formData.password !==
+      formData.confirmPassword
+    ) {
       toast.error("Passwords do not match");
       return;
     }
 
     try {
-      await await api.post(
-    "/employee/register",
-        {
-          username: formData.username,
-          full_name: formData.full_name,
-          email: formData.email,
-          department: formData.department,
-          password: formData.password,
-        }
-      );
+      await api.post("/employee/register", {
+        username: formData.username,
+        full_name: formData.full_name,
+        email: formData.email,
+        department: formData.department,
+        password: formData.password,
+      });
 
       toast.success("Registration Successful");
 
       onClose();
-    } catch (err) {
+
+      setFormData({
+        username: "",
+        full_name: "",
+        email: "",
+        department: "",
+        password: "",
+        confirmPassword: "",
+      });
+
+    } catch {
+
       toast.error("Registration Failed");
+
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+    <div className="register-overlay">
 
-      <div className="bg-white rounded-xl shadow-lg p-8 w-[500px]">
+      <div className="register-card">
 
-        <h2 className="text-2xl font-bold text-center text-blue-700 mb-6">
+        {/* Close */}
+
+        <button
+          className="close-btn"
+          onClick={onClose}
+        >
+          <X size={22} />
+        </button>
+
+        {/* Icon */}
+
+        <div className="register-icon">
+
+          <UserPlus size={42} />
+
+        </div>
+
+        <h2>
+
           Employee Registration
+
         </h2>
 
-        <form
-          onSubmit={handleRegister}
-          className="space-y-4"
-        >
+        <p>
 
-          <input
-            name="username"
-            placeholder="Username"
-            className="w-full border rounded-lg p-3"
-            onChange={handleChange}
-            required
-          />
+          Create your employee account
 
-          <input
-            name="full_name"
-            placeholder="Full Name"
-            className="w-full border rounded-lg p-3"
-            onChange={handleChange}
-            required
-          />
+        </p>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            className="w-full border rounded-lg p-3"
-            onChange={handleChange}
-            required
-          />
+        <form onSubmit={handleRegister}>
 
-          <input
-            name="department"
-            placeholder="Department"
-            className="w-full border rounded-lg p-3"
-            onChange={handleChange}
-            required
-          />
+          {/* Username */}
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="w-full border rounded-lg p-3"
-            onChange={handleChange}
-            required
-          />
+          <div className="input-group">
 
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            className="w-full border rounded-lg p-3"
-            onChange={handleChange}
-            required
-          />
+            <User size={19} />
 
-          <div className="flex justify-end gap-3 mt-5">
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
+
+          </div>
+
+          {/* Full Name */}
+
+          <div className="input-group">
+
+            <User size={19} />
+
+            <input
+              type="text"
+              name="full_name"
+              placeholder="Full Name"
+              value={formData.full_name}
+              onChange={handleChange}
+              required
+            />
+
+          </div>
+
+          {/* Email */}
+
+          <div className="input-group">
+
+            <Mail size={19} />
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+
+          </div>
+
+          {/* Department */}
+
+          <div className="input-group">
+
+            <Building2 size={19} />
+
+            <input
+              type="text"
+              name="department"
+              placeholder="Department"
+              value={formData.department}
+              onChange={handleChange}
+              required
+            />
+
+          </div>
+
+          {/* Password */}
+
+          <div className="input-group">
+
+            <Lock size={19} />
+
+            <input
+              type={
+                showPassword
+                  ? "text"
+                  : "password"
+              }
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
 
             <button
               type="button"
+              className="eye-btn"
+              onClick={() =>
+                setShowPassword(!showPassword)
+              }
+            >
+              {showPassword ? (
+                <EyeOff size={18} />
+              ) : (
+                <Eye size={18} />
+              )}
+            </button>
+
+          </div>
+
+          {/* Confirm Password */}
+
+          <div className="input-group">
+
+            <Lock size={19} />
+
+            <input
+              type={
+                showConfirmPassword
+                  ? "text"
+                  : "password"
+              }
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+
+            <button
+              type="button"
+              className="eye-btn"
+              onClick={() =>
+                setShowConfirmPassword(
+                  !showConfirmPassword
+                )
+              }
+            >
+              {showConfirmPassword ? (
+                <EyeOff size={18} />
+              ) : (
+                <Eye size={18} />
+              )}
+            </button>
+
+          </div>
+
+          <div className="register-buttons">
+
+            <button
+              type="button"
+              className="cancel-btn"
               onClick={onClose}
-              className="px-5 py-2 rounded-lg border"
             >
               Cancel
             </button>
 
             <button
               type="submit"
-              className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+              className="register-btn"
             >
               Register
             </button>
@@ -149,6 +292,4 @@ const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
 
     </div>
   );
-};
-
-export default RegisterModal;
+}
