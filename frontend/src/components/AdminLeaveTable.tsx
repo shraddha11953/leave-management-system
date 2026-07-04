@@ -23,40 +23,8 @@ export default function AdminLeaveTable({
   refresh,
 }: Props) {
 
-  const updateStatus = async (
-    id: number,
-    status: string
-  ) => {
-
-    let feedback = "";
-
-    if (status === "REJECTED") {
-
-      feedback =
-        prompt("Enter Feedback") || "";
-
-    }
-
-    try {
-
-      await api.put(`/leave/${id}`, {
-        status,
-        feedback,
-      });
-
-      toast.success(
-        `Leave ${status.toLowerCase()} successfully`
-      );
-
-      refresh();
-
-    } catch {
-
-      toast.error("Failed to update status");
-
-    }
-
-  };
+  
+  
 
   const [selectedLeaveId, setSelectedLeaveId] = useState<number | null>(null);
 
