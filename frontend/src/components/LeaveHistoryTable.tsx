@@ -1,3 +1,5 @@
+import "./LeaveHistoryTable.css";
+
 interface Leave {
   id: number;
   leave_reason: string;
@@ -15,187 +17,151 @@ export default function LeaveHistoryTable({
   history,
 }: LeaveHistoryTableProps) {
 
-  const getStatusColor = (status: string) => {
+  const getStatusClass = (status: string): string => {
+    switch (status.toUpperCase()) {
+      case "APPROVED":
+        return "status approved";
 
-  switch (status.toUpperCase()) {
+      case "REJECTED":
+        return "status rejected";
 
-    case "APPROVED":
-      return `
-      bg-green-100
-      text-green-700
-      border
-      border-green-300
-      `;
+      default:
+        return "status pending";
+    }
+  };
 
-    case "REJECTED":
-      return `
-      bg-red-100
-      text-red-700
-      border
-      border-red-300
-      `;
+  const calculateDays = (
+    startDate: string,
+    endDate: string
+  ): number => {
 
-    default:
-      return `
-      bg-yellow-100
-      text-yellow-700
-      border
-      border-yellow-300
-      `;
-  }
-};
+    const diff =
+      new Date(endDate).getTime() -
+      new Date(startDate).getTime();
+
+    return Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1;
+  };
+
+  const formatDate = (date: string): string => {
+    return new Date(date).toLocaleDateString("en-GB");
+  };
+
   return (
-    
-      <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
 
-      <div className="flex justify-between items-center mb-8">
+    <div className="history-container">
 
-  <h2 className="text-3xl font-bold bg-gradient-to-r bg-slate-100 text-slate-700 bg-clip-text text-transparent">
-    Leave History
-  </h2>
+      <div className="history-header">
 
-  <div className="bg-blue-50 px-4 py-2 rounded-xl">
+        <div>
 
-    <span className="text-blue-700 font-semibold">
-      Total Requests : {history.length}
-    </span>
+          <h2>Leave History</h2>
 
-  </div>
+          <p>Track all your leave requests</p>
 
-</div>
+        </div>
+
+        <div className="history-count">
+
+          Total Requests : {history.length}
+
+        </div>
+
+      </div>
 
       {
-        history.length === 0 ? (
 
-          <div className="text-center py-16">
+        history.length === 0 ?
 
-  <h3 className="text-xl font-semibold text-gray-500">
-    No Leave Requests Found
-  </h3>
+        (
 
-  <p className="text-gray-400 mt-2">
-    Your leave requests will appear here.
-  </p>
+          <div className="empty-history">
 
-</div>
+            <h3>No Leave Requests Found</h3>
 
-        ) : (
+            <p>Your leave requests will appear here.</p>
 
-          
-            <div className="overflow-x-auto rounded-2xl border border-gray-200">
+          </div>
 
-            <table className="w-full border-collapse bg-white">
+        )
+
+        :
+
+        (
+
+          <div className="table-wrapper">
+
+            <table className="history-table">
 
               <thead>
-  <tr className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
 
-    <th className="border border-gray-300 px-6 py-5">
-      Sr No
-    </th>
+                <tr>
 
-    <th className="border border-gray-300 px-6 py-5">
-      Reason
-    </th>
+                  <th>Sr No</th>
 
-    <th className="border border-gray-300 px-6 py-5">
-      Start Date
-    </th>
+                  <th>Reason</th>
 
-    <th className="border border-gray-300 px-6 py-5">
-      End Date
-    </th>
-<th className="border border-gray-300 px-6 py-5 text-center">
-Total Days
-</th>
-    <th className="border border-gray-300 px-6 py-5">
-      Status
-    </th>
+                  <th>Start Date</th>
 
-    <th className="border border-gray-300 px-6 py-5">
-      Feedback
-    </th>
+                  <th>End Date</th>
 
-  </tr>
-</thead>
+                  <th>Total Days</th>
+
+                  <th>Status</th>
+
+                  <th>Feedback</th>
+
+                </tr>
+
+              </thead>
+
               <tbody>
 
-{
-  history.map((leave, index) => (
+                {
 
-    <tr
-      key={leave.id}
-      className="
-      border-b
-      even:bg-gray-50
-      hover:bg-blue-50
-      transition-all
-      duration-200
-      "
-    >
+                  history.map((leave,index)=>(
 
-      <td className="px-6 py-6 text-center font-semibold text-gray-600">
-        {index + 1}
-      </td>
+                    <tr key={leave.id}>
 
-      <td className="px-6 py-6 font-medium text-gray-700">
-        {leave.leave_reason}
-      </td>
+                      <td>{index+1}</td>
 
-      <td className="px-6 py-6 text-center text-gray-600">
-        {leave.start_date}
-      </td>
+                      <td>{leave.leave_reason}</td>
 
-      <td className="px-6 py-6 text-center text-gray-600">
-        {leave.end_date}
-      </td>
+                      <td>{formatDate(leave.start_date)}</td>
 
-      <td className="border border-gray-200 px-6 py-5 text-center">
+                      <td>{formatDate(leave.end_date)}</td>
 
-{Math.ceil(
-(
-new Date(leave.end_date).getTime() -
-new Date(leave.start_date).getTime()
-)
-/ (1000*60*60*24)
-)+1}
+                      <td>
 
-</td>
+                        {calculateDays(
+                          leave.start_date,
+                          leave.end_date
+                        )}
 
-      <td className="px-6 py-6 text-center">
+                      </td>
 
-        <span
-          className={`
-            px-4 py-2
-            rounded-full
-            text-sm
-            font-semibold
-            shadow-sm
-            ${getStatusColor(leave.status)}
-          `}
-        >
-          {leave.status}
-        </span>
+                      <td>
 
-      </td>
+                        <span
+                          className={getStatusClass(leave.status)}
+                        >
+                          {leave.status}
+                        </span>
 
-      <td className="px-6 py-6 text-center text-gray-600">
+                      </td>
 
-        {
-          leave.feedback
-            ? leave.feedback
-            : "-"
-        }
+                      <td>
 
-      </td>
+                        {leave.feedback || "-"}
 
-    </tr>
+                      </td>
 
-  ))
-}
+                    </tr>
 
-</tbody>
+                  ))
 
+                }
 
+              </tbody>
 
             </table>
 
@@ -206,5 +172,7 @@ new Date(leave.start_date).getTime()
       }
 
     </div>
+
   );
+
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
-
 import api from "../services/api";
 import { toast } from "react-toastify";
+import "./LeaveForm.css";
 
 interface LeaveFormProps {
   employeeId: number;
@@ -29,15 +29,12 @@ export default function LeaveForm({
     }
 
     try {
-      await api.post(
-        "/leave/apply",
-        {
-          employee_id: employeeId,
-          leave_reason: leaveReason,
-          start_date: startDate,
-          end_date: endDate,
-        }
-      );
+      await api.post("/leave/apply", {
+        employee_id: employeeId,
+        leave_reason: leaveReason,
+        start_date: startDate,
+        end_date: endDate,
+      });
 
       toast.success("Leave Applied Successfully 🎉");
 
@@ -47,45 +44,50 @@ export default function LeaveForm({
 
       refresh();
       close();
-    } catch (error) {
+    } catch {
       toast.error("Unable to apply leave");
     }
   };
 
   return (
-    <div className="mt-8 bg-white shadow-lg rounded-xl p-8">
+    <div className="leave-form-container">
 
-      <h2 className="text-2xl font-bold text-blue-700 mb-6">
-        Apply Leave
-      </h2>
+      <div className="leave-form-header">
+
+        <h2>Apply Leave</h2>
+
+        <p>
+          Fill in the details below to submit your leave request.
+        </p>
+
+      </div>
 
       <form
+        className="leave-form"
         onSubmit={handleSubmit}
-        className="space-y-5"
       >
-        <div>
-          <label className="font-semibold">
-            Leave Reason
-          </label>
+
+        <div className="form-group">
+
+          <label>Leave Reason</label>
 
           <textarea
+            rows={5}
+            placeholder="Enter your leave reason..."
             value={leaveReason}
             onChange={(e) =>
               setLeaveReason(e.target.value)
             }
-            rows={4}
-            className="w-full border rounded-lg p-3 mt-2"
-            placeholder="Enter Leave Reason"
             required
           />
+
         </div>
 
-        <div className="grid md:grid-cols-2 gap-5">
+        <div className="date-row">
 
-          <div>
-            <label className="font-semibold">
-              Start Date
-            </label>
+          <div className="form-group">
+
+            <label>Start Date</label>
 
             <input
               type="date"
@@ -93,15 +95,14 @@ export default function LeaveForm({
               onChange={(e) =>
                 setStartDate(e.target.value)
               }
-              className="w-full border rounded-lg p-3 mt-2"
               required
             />
+
           </div>
 
-          <div>
-            <label className="font-semibold">
-              End Date
-            </label>
+          <div className="form-group">
+
+            <label>End Date</label>
 
             <input
               type="date"
@@ -109,26 +110,26 @@ export default function LeaveForm({
               onChange={(e) =>
                 setEndDate(e.target.value)
               }
-              className="w-full border rounded-lg p-3 mt-2"
               required
             />
+
           </div>
 
         </div>
 
-        <div className="flex justify-end gap-4">
+        <div className="button-group">
 
           <button
             type="button"
+            className="cancel-btn"
             onClick={close}
-            className="px-6 py-2 border rounded-lg hover:bg-gray-100"
           >
             Cancel
           </button>
 
           <button
             type="submit"
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="apply-btn"
           >
             Apply Leave
           </button>

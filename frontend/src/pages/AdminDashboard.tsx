@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import api from "../services/api";
-import {
-  FileText,
-  Clock3,
-  CheckCircle2,
-  XCircle,
-} from "lucide-react";
 
 import DashboardCard from "../components/DashboardCard";
-//import AdminLeaveTable from "../components/AdminLeaveTable";
 import AdminLeaveTable from "../components/AdminLeaveTable";
+
+import "./AdminDashboard.css";
 
 interface LeaveRequest {
   id: number;
@@ -28,114 +23,149 @@ export default function AdminDashboard() {
     localStorage.getItem("admin") || "{}"
   );
 
-  const [requests, setRequests] = useState<LeaveRequest[]>([]);
+  const [requests, setRequests] =
+    useState<LeaveRequest[]>([]);
 
   const loadRequests = async () => {
+
     try {
+
       const response = await api.get("/leave");
 
       setRequests(response.data);
 
     } catch {
+
       toast.error("Unable to load leave requests");
+
     }
+
   };
 
   useEffect(() => {
+
     loadRequests();
+
   }, []);
 
   const total = requests.length;
 
   const pending = requests.filter(
-    (item) => item.status.toUpperCase() === "PENDING"
+    item => item.status.toUpperCase() === "PENDING"
   ).length;
 
   const approved = requests.filter(
-    (item) => item.status.toUpperCase() === "APPROVED"
+    item => item.status.toUpperCase() === "APPROVED"
   ).length;
 
   const rejected = requests.filter(
-    (item) => item.status.toUpperCase() === "REJECTED"
+    item => item.status.toUpperCase() === "REJECTED"
   ).length;
 
   return (
-    <div className="min-h-screen bg-50">
 
-      {/* Header */}
+    <div className="admin-dashboard">
 
-      <div className="bg-white border-b border-slate-200 shadow-sm px-8 py-5 flex justify-between items-center">
+      <header className="admin-header">
 
         <div>
 
-          <h1 className="text-3xl font-bold text-slate-800">
-            Admin Dashboard
-          </h1>
+          <h1>Admin Dashboard</h1>
 
-          <p className="text-slate-500 mt-1">
-            Welcome {admin.username}
+          <p>
+            Welcome,
+            <strong> {admin.username}</strong>
           </p>
 
         </div>
 
         <button
+          className="logout-btn"
           onClick={() => {
+
             localStorage.removeItem("admin");
-            window.location.href = "/";
+
+            window.location.href="/";
+
           }}
-          className="px-5 py-2 bg-red-500 text-white rounded-xl shadow hover:bg-red-600 transition"
         >
+
           Logout
+
         </button>
 
-      </div>
+      </header>
 
-      {/* Cards */}
+      <div className="admin-container">
 
-      
-        <div className="grid md:grid-cols-4 gap-6 px-8 pt-8 pb-4">
+        <div className="dashboard-overview">
 
-        <DashboardCard
-          title="Total Requests"
-          value={total}
-          color="bg-blue-300"
-          icon={<FileText className="text-blue-600" size={30} />}
-        />
+          <div className="overview-header">
 
-        <DashboardCard
-          title="Pending"
-          value={pending}
-          color="bg-yellow-300"
-          icon={<Clock3 className="text-yellow-600" size={30} />}
-        />
+            <div>
 
-        <DashboardCard
-          title="Approved"
-          value={approved}
-          color="bg-green-300"
-          icon={<CheckCircle2 className="text-green-600" size={30} />}
-        />
+              <h2>Dashboard Overview</h2>
 
-        <DashboardCard
-          title="Rejected"
-          value={rejected}
-          color="bg-red-300"
-          icon={<XCircle className="text-red-600" size={30} />}
-        />
+              <p>
+                Monitor all employee leave requests
+              </p>
 
-      </div>
+            </div>
 
-      {/* Table */}
+            <div className="overview-date">
 
-      <div className="px-8 pb-8">
+              {new Date().toLocaleDateString("en-GB")}
 
-        <AdminLeaveTable
-          requests={requests}
-          refresh={loadRequests}
-        />
+            </div>
+
+          </div>
+
+          <div className="dashboard-cards">
+
+            <DashboardCard
+              title="Total Requests"
+              value={total}
+              color="blue"
+            />
+
+            <DashboardCard
+              title="Pending"
+              value={pending}
+              color="orange"
+            />
+
+            <DashboardCard
+              title="Approved"
+              value={approved}
+              color="green"
+            />
+
+            <DashboardCard
+              title="Rejected"
+              value={rejected}
+              color="red"
+            />
+
+          </div>
+
+        </div>
+
+        <div className="table-section">
+
+          <AdminLeaveTable
+
+            requests={requests}
+
+            refresh={loadRequests}
+
+          />
+
+        </div>
 
       </div>
 
     </div>
+
   );
+
 }

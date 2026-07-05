@@ -1,0 +1,249 @@
+.notification-card{
+
+    background:#fff;
+
+    border-radius:12px;
+
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+
+    overflow:hidden;
+
+    border-left:6px solid #1f3c88;
+}
+
+/* Header */
+
+.notification-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:22px 28px;
+
+    border-bottom:1px solid #ececec;
+}
+
+.notification-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+}
+
+.bell-box{
+
+    width:52px;
+
+    height:52px;
+
+    background:#e8f1ff;
+
+    color:#1f3c88;
+
+    border-radius:12px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+}
+
+.notification-title h2{
+
+    font-size:24px;
+
+    color:#243b64;
+
+    margin-bottom:5px;
+}
+
+.notification-title p{
+
+    color:#777;
+
+    font-size:14px;
+}
+
+/* Body */
+
+.notification-body{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:22px;
+
+    padding:28px;
+}
+
+.icon-circle{
+
+    width:65px;
+
+    height:65px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-shrink:0;
+}
+
+.notification-body h3{
+
+    font-size:22px;
+
+    color:#243b64;
+
+    margin-bottom:10px;
+}
+
+.notification-body p{
+
+    color:#666;
+
+    line-height:28px;
+
+    font-size:15px;
+}
+
+/* Status Badge */
+
+.status-badge{
+
+    padding:8px 18px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    text-transform:capitalize;
+}
+
+/* Green */
+
+.notification-card.green{
+
+    border-left-color:#28a745;
+}
+
+.icon-circle.green{
+
+    background:#dff6e5;
+
+    color:#28a745;
+}
+
+.status-badge.green{
+
+    background:#dff6e5;
+
+    color:#28a745;
+}
+
+/* Red */
+
+.notification-card.red{
+
+    border-left-color:#dc3545;
+}
+
+.icon-circle.red{
+
+    background:#fde4e4;
+
+    color:#dc3545;
+}
+
+.status-badge.red{
+
+    background:#fde4e4;
+
+    color:#dc3545;
+}
+
+/* Yellow */
+
+.notification-card.yellow{
+
+    border-left-color:#f0ad4e;
+}
+
+.icon-circle.yellow{
+
+    background:#fff5da;
+
+    color:#d48806;
+}
+
+.status-badge.yellow{
+
+    background:#fff5da;
+
+    color:#d48806;
+}
+
+/* Blue */
+
+.notification-card.blue{
+
+    border-left-color:#1f3c88;
+}
+
+.icon-circle.blue{
+
+    background:#e8f1ff;
+
+    color:#1f3c88;
+}
+
+.status-badge.blue{
+
+    background:#e8f1ff;
+
+    color:#1f3c88;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.notification-header{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:15px;
+}
+
+.notification-body{
+
+    flex-direction:column;
+
+    align-items:center;
+
+    text-align:center;
+}
+
+.notification-title{
+
+    flex-direction:column;
+
+    text-align:center;
+}
+
+}
