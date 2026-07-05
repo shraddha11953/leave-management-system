@@ -21,6 +21,7 @@ app = FastAPI(
 Base.metadata.create_all(bind=engine)
 origins = [
     "http://localhost:5173",
+    "http://localhost:8000",
     "https://leave-management-system-1-z15n.onrender.com",
 ]
 app.add_middleware(

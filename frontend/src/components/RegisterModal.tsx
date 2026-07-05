@@ -207,6 +207,7 @@ export default function RegisterModal({
                   ? "text"
                   : "password"
               }
+              maxLength={50}
               name="password"
               placeholder="Password"
               value={formData.password}
@@ -242,6 +243,7 @@ export default function RegisterModal({
                   ? "text"
                   : "password"
               }
+              maxLength={50}
               name="confirmPassword"
               placeholder="Confirm Password"
               value={formData.confirmPassword}
