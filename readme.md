@@ -212,12 +212,13 @@ All business logic, API integration, testing, debugging and customization were i
 # Deployment
 
 Frontend
+https://leave-management-system-1-z15n.onrender.com
 
-[Deployment Link]
+
 
 Backend
+https://leave-management-system-pngr.onrender.com/
 
-[Backend Link]
 
 ---
 
