@@ -54,12 +54,13 @@ Administrators can:
 # Dashboard
 
 Employee Dashboard
+![Employee Dashboard](screenshots/employee_dashboard.png)
 
-[Employee Dashboard Screenshot]
+
 
 Admin Dashboard
+![Admin Dashboard](screenshots/admin_dashboard.png)
 
-[Admin Dashboard Screenshot]
 
 ---
 
@@ -222,46 +223,46 @@ Backend
 
 # Screenshots
 
+
+## Home Page
+
+![Home Page](screenshots/homepage.png)
+
 ## Employee Login
 
-(Add Screenshot)
+![Employee Login](screenshots/employee_login.png)
 
 ---
 
 ## Employee Dashboard
+![Employee Dashboard](screenshots/employee_dashboard.png)
 
-(Add Screenshot)
+
 
 ---
 
 ## Apply Leave
 
-(Add Screenshot)
+![Apply Leave](screenshots/apply_leave.png)
 
----
-
-## Leave History
-
-(Add Screenshot)
 
 ---
 
 ## Admin Login
 
-(Add Screenshot)
+![Admin Login](screenshots/admin_login.png)
 
 ---
 
 ## Admin Dashboard
 
-(Add Screenshot)
+![Admin Dashboard](screenshots/admin_dashboard.png)
 
 ---
 
 ## Reject Feedback Modal
 
-(Add Screenshot)
-
+![Reject Leave](screenshots/reject_leave.png)
 ---
 
 # Demo Video
