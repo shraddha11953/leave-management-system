@@ -7,6 +7,8 @@ import LeaveForm from "../components/LeaveForm";
 import LeaveHistoryTable from "../components/LeaveHistoryTable";
 import NotificationCard from "../components/NotificationCard";
 
+import "./EmployeeDashboard.css";
+
 export default function EmployeeDashboard() {
 
   const employee = JSON.parse(
@@ -14,160 +16,149 @@ export default function EmployeeDashboard() {
   );
 
   const [leaveBalance, setLeaveBalance] = useState(0);
-
   const [leaveHistory, setLeaveHistory] = useState([]);
-
   const [showForm, setShowForm] = useState(false);
 
   const loadEmployee = async () => {
-
     try {
-
-      const response = await api.get(
-        `/employee/${employee.employee_id}`
-      );
-
-      setLeaveBalance(
-        response.data.leave_balance
-      );
-
+      const response = await api.get(`/employee/${employee.employee_id}`);
+      setLeaveBalance(response.data.leave_balance);
     } catch {
-
       toast.error("Unable to load employee");
-
     }
-
   };
 
   const loadHistory = async () => {
-
     try {
-
       const response = await api.get(
         `/leave/employee/${employee.employee_id}`
       );
-
       setLeaveHistory(response.data);
-
     } catch {
-
       toast.error("Unable to load history");
-
     }
-
   };
 
   useEffect(() => {
-
     loadEmployee();
-
     loadHistory();
-
   }, []);
 
   return (
 
-    <div className="min-h-screen bg-gray-100">
+    <div className="employee-dashboard">
 
       {/* Header */}
 
-      <div className="bg-blue-700 text-white p-6 flex justify-between">
-        <div className="mt-8">
-
-    <NotificationCard
-
-        history={leaveHistory}
-
-    />
-
-</div>
+      <header className="dashboard-header">
 
         <div>
 
-          <h1 className="text-3xl font-bold">
-
-            Employee Dashboard
-
-          </h1>
+          <h1>Employee Dashboard</h1>
 
           <p>
-
-            Welcome {employee.username}
-
+            Welcome, <strong>{employee.username}{employee.employee_name}</strong>
           </p>
 
         </div>
 
         <button
+          className="logout-btn"
           onClick={() => {
-
             localStorage.removeItem("employee");
-
             window.location.href = "/";
           }}
-          className="bg-red-500 px-5 rounded-lg"
         >
-
           Logout
-
         </button>
 
-      </div>
+      </header>
 
-      <div className="p-8">
+      <div className="dashboard-container">
 
-        <div className="grid md:grid-cols-3 gap-5">
+       <div className="dashboard-overview">
 
-          <DashboardCard
-            title="Leave Balance"
-            value={`${leaveBalance} Days`}
-            color="bg-green-600"
-          />
+  <div className="overview-header">
 
-          <DashboardCard
-            title="Total Requests"
-            value={leaveHistory.length}
-            color="bg-blue-600"
-          />
+    <div>
+      <h2>Dashboard Overview</h2>
+      <p>Your leave summary at a glance</p>
+    </div>
 
-          <DashboardCard
-            title="Status"
-            value="Active"
-            color="bg-purple-600"
+    <div className="overview-date">
+      {new Date().toLocaleDateString("en-GB")}
+    </div>
+
+  </div>
+
+  <div className="dashboard-cards">
+
+    <DashboardCard
+      title="Leave Balance"
+      value={`${leaveBalance} Days`}
+      color="green"
+    />
+
+    <DashboardCard
+      title="Total Requests"
+      value={leaveHistory.length}
+      color="blue"
+    />
+
+    <DashboardCard
+      title="Account Status"
+      value="Active"
+      color="orange"
+    />
+
+  </div>
+
+</div>
+
+        <div className="notification-section">
+
+          <NotificationCard
+            history={leaveHistory}
           />
 
         </div>
 
-        <div className="mt-10">
+        <div className="action-bar">
 
           <button
-            onClick={() =>
-              setShowForm(!showForm)
-            }
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg"
+            className="leave-btn"
+            onClick={() => setShowForm(!showForm)}
           >
-
-            Apply Leave
-
+            {showForm ? "Close Form" : "Apply Leave"}
           </button>
 
         </div>
 
-        {
+        {showForm && (
 
-          showForm && (
+  <div
+    className="modal-overlay"
+    onClick={() => setShowForm(false)}
+  >
 
-            <LeaveForm
-              employeeId={employee.employee_id}
-              refresh={loadHistory}
-              close={() => setShowForm(false)}
-            />
+    <div
+      className="modal-content"
+      onClick={(e) => e.stopPropagation()}
+    >
 
-          )
+      <LeaveForm
+        employeeId={employee.employee_id}
+        refresh={loadHistory}
+        close={() => setShowForm(false)}
+      />
 
-        }
+    </div>
 
-        <div className="mt-10">
+  </div>
+
+)}
+
+        <div className="history-card">
 
           <LeaveHistoryTable
             history={leaveHistory}
@@ -179,15 +170,5 @@ export default function EmployeeDashboard() {
 
     </div>
 
-
-
-
-
-
-
-
-
-
   );
-
 }

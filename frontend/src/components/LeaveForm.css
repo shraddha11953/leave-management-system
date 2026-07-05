@@ -1,0 +1,191 @@
+.leave-form-container{
+
+    background:#ffffff;
+
+    
+    margin:0;
+
+    box-shadow:none;
+
+    border-radius:14px;
+
+
+    overflow:hidden;
+}
+
+/* Header */
+
+.leave-form-header{
+
+    background:#f7f9fc;
+
+    padding:25px 30px;
+
+    border-bottom:1px solid #e7ebf0;
+}
+
+.leave-form-header h2{
+
+    color:#243b64;
+
+    font-size:28px;
+
+    margin-bottom:8px;
+}
+
+.leave-form-header p{
+
+    color:#777;
+
+    font-size:15px;
+}
+
+/* Form */
+
+.leave-form{
+
+    padding:30px;
+}
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    margin-bottom:25px;
+}
+
+.form-group label{
+
+    font-size:15px;
+
+    font-weight:600;
+
+    color:#243b64;
+
+    margin-bottom:10px;
+}
+
+.form-group textarea,
+.form-group input{
+
+    width:100%;
+
+    padding:14px 16px;
+
+    border:1px solid #d6dbe5;
+
+    border-radius:8px;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:.3s;
+
+    background:#fff;
+}
+
+.form-group textarea{
+
+    resize:vertical;
+
+    min-height:130px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus{
+
+    border-color:#1f3c88;
+
+    box-shadow:0 0 0 4px rgba(31,60,136,.10);
+}
+
+/* Date Row */
+
+.date-row{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:25px;
+}
+
+/* Buttons */
+
+.button-group{
+    margin-top:20px;
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:15px;
+}
+
+.cancel-btn{
+    min-width:90px;
+    padding:12px 24px;
+    background:#ffffff;
+    color:#243b64;
+    border:1px solid #cfd5df;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.cancel-btn:hover{
+    background:#f3f5f8;
+}
+
+.apply-btn{
+
+    padding:12px 30px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#1f3c88;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.apply-btn:hover{
+
+    background:#17306c;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.date-row{
+
+    grid-template-columns:1fr;
+}
+
+.button-group{
+
+    flex-direction:column;
+}
+
+.cancel-btn,
+.apply-btn{
+
+    width:100%;
+}
+
+}

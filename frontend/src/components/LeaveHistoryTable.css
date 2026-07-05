@@ -1,0 +1,193 @@
+.history-container{
+
+    background:#fff;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+
+}
+
+/* Header */
+
+.history-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:22px 28px;
+
+    background:#f7f9fc;
+
+    border-bottom:1px solid #e6eaf1;
+}
+
+.history-header h2{
+
+    color:#243b64;
+
+    font-size:28px;
+
+    margin-bottom:5px;
+}
+
+.history-header p{
+
+    color:#777;
+
+    font-size:15px;
+}
+
+.history-count{
+
+    background:#e8f1ff;
+
+    color:#2457c5;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    font-weight:600;
+}
+
+/* Table */
+
+.table-wrapper{
+
+    overflow-x:auto;
+}
+
+.history-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+.history-table thead{
+
+    background:#1f3c88;
+
+    color:white;
+}
+
+.history-table th{
+
+    padding:18px;
+
+    text-align:center;
+
+    font-size:15px;
+
+    font-weight:600;
+}
+
+.history-table td{
+
+    padding:18px;
+
+    text-align:center;
+
+    border-bottom:1px solid #ececec;
+
+    color:#444;
+
+    font-size:15px;
+}
+
+.history-table tbody tr:nth-child(even){
+
+    background:#fafbfd;
+}
+
+.history-table tbody tr:hover{
+
+    background:#eef5ff;
+
+    transition:.3s;
+}
+
+/* Status */
+
+.status{
+
+    padding:8px 18px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    display:inline-block;
+
+    min-width:100px;
+}
+
+.approved{
+
+    background:#dff6e5;
+
+    color:#1b8a42;
+}
+
+.rejected{
+
+    background:#fde4e4;
+
+    color:#c62828;
+}
+
+.pending{
+
+    background:#fff4d9;
+
+    color:#cc8a00;
+}
+
+/* Empty */
+
+.empty-history{
+
+    text-align:center;
+
+    padding:70px 20px;
+}
+
+.empty-history h3{
+
+    color:#444;
+
+    margin-bottom:12px;
+}
+
+.empty-history p{
+
+    color:#888;
+}
+
+/* Responsive */
+
+@media(max-width:900px){
+
+.history-header{
+
+    flex-direction:column;
+
+    gap:15px;
+
+    text-align:center;
+}
+
+.history-table{
+
+    min-width:900px;
+}
+
+}

@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../services/api";
-import { useState } from "react";
 import FeedbackModal from "./FeedbackModal";
+import "./AdminLeaveTable.css";
 
 interface LeaveRequest {
   id: number;
@@ -23,257 +24,289 @@ export default function AdminLeaveTable({
   refresh,
 }: Props) {
 
-  
-  
+  const [selectedLeaveId, setSelectedLeaveId] =
+    useState<number | null>(null);
 
-  const [selectedLeaveId, setSelectedLeaveId] = useState<number | null>(null);
+  const [openModal, setOpenModal] =
+    useState(false);
 
-const [openModal, setOpenModal] = useState(false);
-const approveLeave = async (id: number) => {
-
-    try {
-
-        await api.put(`/leave/${id}`, {
-            status: "APPROVED",
-            feedback: ""
-        });
-
-        toast.success("Leave Approved");
-
-        refresh();
-
-    }
-    catch {
-
-        toast.error("Unable to approve");
-
-    }
-
-};
-const rejectLeave = async (feedback: string) => {
-
-    if (!selectedLeaveId) return;
+  const approveLeave = async (id: number) => {
 
     try {
 
-        await api.put(`/leave/${selectedLeaveId}`, {
-            status: "REJECTED",
-            feedback
-        });
+      await api.put(`/leave/${id}`, {
+        status: "APPROVED",
+        feedback: "",
+      });
 
-        toast.success("Leave Rejected");
+      toast.success("Leave Approved");
 
-        refresh();
+      refresh();
 
-    }
-    catch {
+    } catch {
 
-        toast.error("Unable to reject");
-
-    }
-
-};
-
-  const getBadgeColor = (status: string) => {
-
-    switch (status.toUpperCase()) {
-
-      case "APPROVED":
-        return "bg-green-100 text-green-700";
-
-      case "REJECTED":
-        return "bg-red-100 text-red-700";
-
-      default:
-        return "bg-yellow-100 text-yellow-700";
+      toast.error("Unable to approve");
 
     }
 
   };
 
+  const rejectLeave = async (
+    feedback: string
+  ) => {
+
+    if (!selectedLeaveId) return;
+
+    try {
+
+      await api.put(`/leave/${selectedLeaveId}`, {
+        status: "REJECTED",
+        feedback,
+      });
+
+      toast.success("Leave Rejected");
+
+      refresh();
+
+      setOpenModal(false);
+
+    } catch {
+
+      toast.error("Unable to reject");
+
+    }
+
+  };
+
+  const calculateDays = (
+    start: string,
+    end: string
+  ) => {
+
+    return (
+      Math.ceil(
+        (
+          new Date(end).getTime() -
+          new Date(start).getTime()
+        ) /
+          (1000 * 60 * 60 * 24)
+      ) + 1
+    );
+
+  };
+
+  const formatDate = (date: string) => {
+
+    return new Date(date).toLocaleDateString(
+      "en-GB"
+    );
+
+  };
+
   return (
 
-    <div className="bg-white rounded-xl shadow-lg p-6">
+    <div className="admin-table-container">
 
-      <h2 className="text-2xl font-bold text-slate-800 mb-10">
+      <div className="admin-table-header">
 
-        Leave Requests
+        <div>
 
-      </h2>
+          <h2>Leave Requests</h2>
 
-      <div className="overflow-x-auto">
+          <p>
+            Manage employee leave applications
+          </p>
 
-        <table className="w-full border border-slate-300 rounded-xl overflow-hidden border-collapse">
-          <thead>
+        </div>
 
-            <tr className="bg-slate-100 text-slate-700">
-              <th className="p-3 border">Sr No</th>
+        <div className="request-count">
 
-              <th className="px-4 py-4 border border-slate-300">
-                Employee
-              </th>
+          Total : {requests.length}
 
-              <th className="px-4 py-4 border border-slate-300">
-                Reason
-              </th>
+        </div>
 
-              <th className="px-4 py-4 border border-slate-300">
-                Start
-              </th>
+      </div>
 
-              <th className="px-4 py-4 border border-slate-300">
-                End
-              </th>
-              <th className="px-4 py-4 border border-slate-300">
-  Total Days
-</th>
+      {
 
-              <th className="px-4 py-4 border border-slate-300">
-                Status
-              </th>
+        requests.length === 0 ?
 
-              <th className="px-4 py-4 border border-slate-300">
-                Feedback
-              </th>
+        (
 
-              <th className="px-4 py-4 border border-slate-300">
-                Action
-              </th>
+          <div className="empty-table">
 
-            </tr>
+            No Leave Requests Found
 
-          </thead>
+          </div>
 
-          <tbody>
+        )
 
-            {
+        :
 
-              requests.map((leave,index) => (
+        (
 
-                <tr
-                  key={leave.id}
-                  className="hover:bg-slate-50 transition"
-                >
-                  <td className="p-3 border text-center">
-  {index + 1}
-</td>
-                  <td className="p-3 border border-slate-200">
+          <div className="table-wrapper">
 
-                    {leave.employee_name}
+            <table>
 
-                  </td>
+              <thead>
 
-                  <td className="p-3 border border-slate-200">
+                <tr>
 
-                    {leave.leave_reason}
+                  <th>#</th>
 
-                  </td>
+                  <th>Employee</th>
 
-                  <td className="p-3 border border-slate-200">
+                  <th>Reason</th>
 
-                    {leave.start_date}
+                  <th>Start Date</th>
 
-                  </td>
+                  <th>End Date</th>
 
-                  <td className="p-3 border border-slate-200">
+                  <th>Days</th>
 
-                    {leave.end_date}
+                  <th>Status</th>
 
-                  </td>
+                  <th>Feedback</th>
 
-                  <td className="p-3 border text-center">
-
-  {Math.ceil(
-    (
-      new Date(leave.end_date).getTime() -
-      new Date(leave.start_date).getTime()
-    ) /
-      (1000 * 60 * 60 * 24)
-  ) + 1}
-
-</td>
-
-                  <td className="p-3 border border-slate-200">
-
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-semibold ${getBadgeColor(
-                        leave.status
-                      )}`}
-                    >
-                      {leave.status}
-                    </span>
-
-                  </td>
-
-                  <td className="px-4 py-4 border border-slate-200 max-w-[280px] text-sm leading-6 break-words">
-
-                    {
-
-                      leave.feedback
-                        ? leave.feedback
-                        : "-"
-
-                    }
-
-                  </td>
-
-                  <td className="px-4 py-4 border border-slate-200 text-center">
-{
-leave.status==="PENDING" && (
-
-<select
-className="border rounded-lg px-3 py-2 bg-white shadow-sm"
-defaultValue=""
-onChange={(e)=>{
-
-if(e.target.value==="APPROVE")
-approveLeave(leave.id);
-
-if(e.target.value==="REJECT"){
-setSelectedLeaveId(leave.id);
-setOpenModal(true);
-}
-
-e.target.selectedIndex=0;
-
-}}
->
-
-<option value="">
-Choose
-</option>
-
-<option value="APPROVE">
-✅ Approve
-</option>
-
-<option value="REJECT">
-❌ Reject
-</option>
-
-</select>
-
-)
-}
-</td>
-
+                  <th>Action</th>
 
                 </tr>
 
-              ))
+              </thead>
 
-            }
+              <tbody>
 
-          </tbody>
+                {
 
-        </table>
+                  requests.map((leave,index)=>(
 
-      </div>
+                    <tr key={leave.id}>
+
+                      <td>{index+1}</td>
+
+                      <td>{leave.employee_name}</td>
+
+                      <td>{leave.leave_reason}</td>
+
+                      <td>{formatDate(leave.start_date)}</td>
+
+                      <td>{formatDate(leave.end_date)}</td>
+
+                      <td>
+
+                        {calculateDays(
+                          leave.start_date,
+                          leave.end_date
+                        )}
+
+                      </td>
+
+                      <td>
+
+                        <span
+                          className={`status ${leave.status.toLowerCase()}`}
+                        >
+
+                          {leave.status}
+
+                        </span>
+
+                      </td>
+
+                      <td>
+
+                        {leave.feedback || "-"}
+
+                      </td>
+
+                      <td>
+
+                        {
+
+                          leave.status === "PENDING"
+
+                          &&
+
+                          <select
+
+                            className="action-select"
+
+                            defaultValue=""
+
+                            onChange={(e)=>{
+
+                              if(e.target.value==="APPROVE"){
+
+                                approveLeave(leave.id);
+
+                              }
+
+                              if(e.target.value==="REJECT"){
+
+                                setSelectedLeaveId(
+                                  leave.id
+                                );
+
+                                setOpenModal(true);
+
+                              }
+
+                              e.target.selectedIndex=0;
+
+                            }}
+
+                          >
+
+                            <option value="">
+
+                              Choose
+
+                            </option>
+
+                            <option value="APPROVE">
+
+                              Approve
+
+                            </option>
+
+                            <option value="REJECT">
+
+                              Reject
+
+                            </option>
+
+                          </select>
+
+                        }
+
+                      </td>
+
+                    </tr>
+
+                  ))
+
+                }
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        )
+
+      }
+
       <FeedbackModal
-    isOpen={openModal}
-    onClose={() => setOpenModal(false)}
-    onSubmit={rejectLeave}
-/>
+
+        isOpen={openModal}
+
+        onClose={() => setOpenModal(false)}
+
+        onSubmit={rejectLeave}
+
+      />
 
     </div>
 
